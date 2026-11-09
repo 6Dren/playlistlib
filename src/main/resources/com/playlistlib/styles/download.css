@@ -1,0 +1,130 @@
+/* Main window */
+
+.root {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.main-menu {
+    -fx-background-color: #eeeeee;
+    -fx-font-family: "Arial";
+}
+
+/* Application title */
+
+.title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+}
+
+/* Menu buttons */
+
+.menu-button {
+    -fx-background-color: #dddddd;
+    -fx-text-fill: #222222;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-background-radius: 3px;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: #cccccc;
+}
+
+.menu-button:pressed {
+    -fx-background-color: #bbbbbb;
+}
+
+/* Output Format */
+.output-format {
+    -fx-max-width: infinity;
+    -fx-cursor: hand;
+}
+
+/* Download button */
+
+.download-button {
+    -fx-background-color: #dddddd;
+    -fx-text-fill: #222222;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-background-radius: 3px;
+    -fx-cursor: hand;
+    -fx-max-width: infinity;
+}
+
+.download-button:hover {
+    -fx-background-color: #cccccc;
+}
+
+.download-button:pressed {
+    -fx-background-color: #bbbbbb;
+}
+
+
+/* Status */
+.status {
+    -fx-alignment: center;
+    -fx-text-fill: #222222;
+}
+
+
+/* Download output */
+
+.output-pane {
+    -fx-background-color: #eeeeee;
+
+
+    /* -fx-border-color: #2b3440; */
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+}
+
+.output-pane>.title {
+    -fx-background-color: #eeeeee;
+
+    -fx-background-radius: 9;
+    -fx-padding: 12 15;
+}
+
+.output-pane>.title>.text {
+    /* -fx-fill: #b9c5d4; */
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.output-pane:expanded>.title {
+    -fx-background-radius: 9 9 0 0;
+}
+
+
+/* Go back button */
+
+.go-back-button {
+    -fx-background-color: #e0b5b5;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-background-radius: 3px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+}
+
+.go-back-button:hover {
+    -fx-background-color: #d69b9b;
+
+}
+
+/* Footer */
+
+.footer {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888888;
+}

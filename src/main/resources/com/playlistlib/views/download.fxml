@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="650.0" prefWidth="410.0" spacing="15" styleClass="main-menu" stylesheets="@../styles/download.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.DownloadController">
+
+    <padding>
+        <Insets bottom="25" left="30" right="30" top="25" />
+    </padding>
+
+    <Label styleClass="title" text="Download media" />
+
+    <Label styleClass="description" text="Enter the URL you want to download." />
+
+    <Separator />
+
+    <Label text="media URL" />
+
+    <TextField fx:id="urlField" prefWidth="350" promptText="https://www.youtube.com/watch?v=..." />
+
+    <Label text="Output format" />
+
+    <ComboBox fx:id="formatBox" prefWidth="150" promptText="Select format" styleClass="output-format" />
+
+    <CheckBox fx:id="thumbnailCheckBox" text="Embed thumbnail" />
+
+    <Label text="Output directory" />
+
+    <TextField fx:id="directoryField" promptText="Default download directory" />
+
+          <Button fx:id="downloadButton" onAction="#handleDownload" prefHeight="40.0" prefWidth="282.0" styleClass="download-button" text="Download" />
+
+          <Label fx:id="statusLabel" styleClass="status" text="Current state" />
+   <TitledPane fx:id="outputPane" animated="false" expanded="false" prefHeight="147.0" prefWidth="350.0" styleClass="output-pane" text="Download ouput">
+      <content>
+         <TextArea fx:id="outputText" editable="false" prefHeight="84.0" prefWidth="348.0" />
+      </content>
+   </TitledPane>
+   <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="350.0">
+      <children>
+      
+          <Button onAction="#goBack" prefWidth="90" styleClass="go-back-button" text="← Back" />
+      </children>
+   </HBox>
+
+</VBox>

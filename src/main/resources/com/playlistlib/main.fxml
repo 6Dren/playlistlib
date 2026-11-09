@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefWidth="310.0" spacing="15" styleClass="main-menu" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.MainController">
+
+    <padding>
+        <Insets bottom="30" left="30" right="30" top="30" />
+    </padding>
+
+    <Label styleClass="title" text="PlaylistLib" />
+
+    <Label styleClass="description" text="Media download manager" />
+
+    <Separator prefWidth="250" />
+
+    <Button fx:id="downloadButton" onAction="#openDownload" prefWidth="220" styleClass="menu-button" text="Download" />
+
+    <Button fx:id="libraryButton" prefWidth="220" styleClass="menu-button" text="Library" />
+
+    <Button fx:id="settingsButton" prefWidth="220" styleClass="menu-button" text="Settings" />
+
+    <Separator prefWidth="250" />
+
+    <Button fx:id="exitButton" onAction="#exitApp" prefWidth="220" styleClass="exit-button" text="Exit" />
+
+    <Label styleClass="footer" text="github - @6Dren" />
+
+</VBox>

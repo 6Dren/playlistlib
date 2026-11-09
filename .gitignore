@@ -1,0 +1,30 @@
+# Maven build output
+target/
+
+# Generated application packages
+dist/
+out/
+
+# Local downloaded binaries
+packaging/windows/tools/
+packaging/linux/tools/
+
+# Downloaded media
+*.mp3
+*.mp4
+*.m4a
+*.webm
+*.wav
+*.flac
+*.opus
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
