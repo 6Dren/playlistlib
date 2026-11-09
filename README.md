@@ -53,4 +53,3 @@ The project will start as a simple downloader and gradually introduce playlist m
 - Store download history and preferences.
 - Save user-specific collections.
 - Implement basic database operations (CRUD).
-- Hash passwords instead of storing them as plaintext.
