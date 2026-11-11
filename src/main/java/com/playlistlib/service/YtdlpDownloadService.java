@@ -50,12 +50,12 @@ public class YtdlpDownloadService {
     private List<String> buildYdlpCommand(DownloadRequest request) {
         List<String> command = new ArrayList<>();
 
-        command.add(YtdlpLocator.getYtDlpPath().toString());
+        command.add(YtdlpLocator.getYtdlpPath().toString());
         command.add(request.getUrl());
 
         if (YtdlpLocator.isWindows()) {
             command.add("--ffmpeg-location");
-            command.add(YtdlpLocator.getFfmpegPath().getParent().toString());
+            command.add(YtdlpLocator.getFfmpegDirectory().toString());
         }
 
         String format = request.getFormat();
