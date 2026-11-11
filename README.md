@@ -49,7 +49,6 @@ The project will start as a simple downloader and gradually introduce playlist m
 ### Phase 3 — Database and Users
 
 - Integrate SQLite.
-- Add user registration and login.
 - Store download history and preferences.
 - Save user-specific collections.
-- Implement basic database operations (CRUD).
+- Implement basic database operations.
