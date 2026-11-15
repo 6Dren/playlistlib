@@ -32,7 +32,6 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        System.out.println(YtdlpLocator.findExecutableOnPath("yt-dlp"));
     }
 
     @FXML

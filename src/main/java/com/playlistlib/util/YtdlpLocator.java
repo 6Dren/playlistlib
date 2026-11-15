@@ -67,9 +67,8 @@ public class YtdlpLocator {
         Path applicationDirectory = getApplicationDirectory();
         Path packagedTools = applicationDirectory.resolve("tools");
 
-        if (Files.isDirectory(packagedTools)) {
+        if (isPackaged())
             return packagedTools;
-        }
 
         // If not found, check the development project structure. So probably it's
         // running from maven
@@ -96,9 +95,12 @@ public class YtdlpLocator {
 
     private static boolean isPackaged() {
         Path applicationDirectory = getApplicationDirectory();
-        Path tools = applicationDirectory.resolve("tools");
 
-        return Files.isDirectory(tools);
+        return applicationDirectory.getFileName().toString().equals("app");
+
+        // Path tools = applicationDirectory.resolve("tools");
+
+        // return Files.isDirectory(tools);
     }
 
     // Executable discovery
@@ -124,54 +126,58 @@ public class YtdlpLocator {
     }
 
     public static Path getYtdlpPath() {
-        if (isPackaged()) {
-            Path ytdlpPath = getToolsDirectory()
-                    .resolve(getExecutableName("yt-dlp"));
-            // Path ytdlpPath;
-            // if (isWindows())
-            // ytdlpPath = getToolsDirectory().resolve("yt-dlp.exe");
-            // else if (isLinux())
-            // ytdlpPath = getToolsDirectory().resolve("yt-dlp");
-            // else
-            // throw new UnsupportedOperationException("Unsupported operating system");
+        String executable = getExecutableName("yt-dlp");
 
-            if (Files.isExecutable(ytdlpPath))
-                return ytdlpPath;
+        Optional<Path> pathExecutable = findExecutableOnPath(executable);
+
+        // Development: system PATH has priority
+        if (!isPackaged() && pathExecutable.isPresent()) {
+            return pathExecutable.get();
         }
 
-        Optional<Path> optYdlpPath = findExecutableOnPath(getExecutableName("yt-dlp"));
+        // Check bundled executable
+        Path bundledExecutable = getToolsDirectory().resolve(executable);
 
-        // Optional<Path> optYdlpPath = Optional.empty();
+        if (Files.isRegularFile(bundledExecutable)
+                && Files.isExecutable(bundledExecutable)) {
+            return bundledExecutable;
+        }
 
-        // if (isWindows())
-        // optYdlpPath = findExecutableOnPath("yt-dlp.exe");
-        // else if (isLinux())
-        // optYdlpPath = findExecutableOnPath("yt-dlp");
+        // Packaged: system PATH is the fallback
+        if (pathExecutable.isPresent()) {
+            return pathExecutable.get();
+        }
 
-        if (optYdlpPath.isPresent())
-            return optYdlpPath.get();
-
-        else
-            throw new IllegalStateException("The program wasn't able to find yt-dlp");
+        throw new IllegalStateException(
+                "The program wasn't able to find yt-dlp");
     }
 
     public static Path getFfmpegDirectory() {
-        if (isPackaged()) {
-            Path ffmpegDir = getToolsDirectory().resolve("ffmpeg");
-            Path ffmpegPath = ffmpegDir.resolve(getExecutableName("ffmpeg"));
-            if (Files.isExecutable(ffmpegPath))
-                return ffmpegDir;
+        String executable = getExecutableName("ffmpeg");
 
+        Optional<Path> pathExecutable = findExecutableOnPath(executable);
+
+        // Development: system PATH has priority
+        if (!isPackaged() && pathExecutable.isPresent()) {
+            return pathExecutable.get().getParent();
         }
 
-        Optional<Path> optFfmpegPath = findExecutableOnPath(getExecutableName("ffmpeg"));
+        // Check bundled executable
+        Path bundledDirectory = getToolsDirectory().resolve("ffmpeg");
+        Path bundledExecutable = bundledDirectory.resolve(executable);
 
-        if (optFfmpegPath.isPresent()) {
-            return optFfmpegPath.get().getParent();
+        if (Files.isRegularFile(bundledExecutable)
+                && Files.isExecutable(bundledExecutable)) {
+            return bundledDirectory;
         }
 
-        throw new IllegalStateException("The program wasn't able to find ffmpeg");
+        // Packaged: system PATH is the fallback
+        if (pathExecutable.isPresent()) {
+            return pathExecutable.get().getParent();
+        }
 
+        throw new IllegalStateException(
+                "The program wasn't able to find ffmpeg");
     }
 
 }
