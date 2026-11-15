@@ -19,7 +19,6 @@ public class YtdlpDownloadService {
         List<String> command = buildYdlpCommand(request);
 
         ProcessBuilder pb = new ProcessBuilder(command);
-        System.out.println(command);
 
         // Redirect error stream
         pb.redirectErrorStream(true);
@@ -30,15 +29,11 @@ public class YtdlpDownloadService {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(process.getInputStream()))) {
 
-            String line = reader.readLine();
+            
+            String line;
 
-            while (line != null) {
-
-                // outputline
-                // final String outputLine = line;
-
+            while ((line = reader.readLine()) != null) {
                 // Update the GUI
-                line = reader.readLine();
                 output.accept(line);
             }
         }

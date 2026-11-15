@@ -47,20 +47,59 @@ public class YtdlpLocator {
     // Application and packaging information
 
     public static Path getApplicationDirectory() {
-        try {
-            URL location = YtdlpLocator.class.getProtectionDomain().getCodeSource().getLocation();
-            Path locationPath = Path.of(location.toURI());
+        // Locate the application directory in a jpackage image
+        Path javaHome = Path.of(System.getProperty("java.home"));
+        Path packagedAppDirectory = javaHome.getParent().resolve("app");
 
-            if (Files.isDirectory(locationPath))
+        if (Files.isDirectory(packagedAppDirectory)) {
+            return packagedAppDirectory;
+        }
+
+        // Development: locate the project directory through maven
+        try {
+            var codeSource = YtdlpLocator.class
+                    .getProtectionDomain()
+                    .getCodeSource();
+
+            if (codeSource == null) {
+                throw new IllegalStateException("Unable to determine application directory");
+            }
+
+            Path locationPath = Path.of(codeSource.getLocation().toURI());
+
+            if (Files.isDirectory(locationPath)) {
                 return locationPath;
-            if (Files.isRegularFile(locationPath) && locationPath.getParent() != null)
+            }
+
+            if (Files.isRegularFile(locationPath) && locationPath.getParent() != null) {
                 return locationPath.getParent();
+            }
 
             throw new IllegalStateException("Unable to determine application directory");
 
         } catch (URISyntaxException e) {
-            throw new IllegalStateException("Unable to determine application directory.", e);
+            throw new IllegalStateException("Unable to determine application directory", e);
         }
+
+        // try {
+        // URL location =
+        // YtdlpLocator.class.getProtectionDomain().getCodeSource().getLocation();
+        // Path locationPath = Path.of(location.toURI());
+
+        // System.out.println(
+        // YtdlpLocator.class.getProtectionDomain().getCodeSource());
+
+        // if (Files.isDirectory(locationPath))
+        // return locationPath;
+        // if (Files.isRegularFile(locationPath) && locationPath.getParent() != null)
+        // return locationPath.getParent();
+
+        // throw new IllegalStateException("Unable to determine application directory");
+
+        // } catch (URISyntaxException e) {
+        // throw new IllegalStateException("Unable to determine application directory.",
+        // e);
+        // }
     }
 
     public static Path getToolsDirectory() {
@@ -81,15 +120,6 @@ public class YtdlpLocator {
         if (Files.isDirectory(tools))
             return tools;
 
-        // if (isWindows()) {
-        // Path tools = root.resolve("packaging").resolve("windows").resolve("tools");
-        // if (Files.isDirectory(tools))
-        // return tools;
-        // } else if (isLinux()) {
-        // Path tools = root.resolve("packaging").resolve("linux").resolve("tools");
-        // if (Files.isDirectory(tools))
-        // return tools;
-        // }
         throw new IllegalStateException("Unable to determine tools directory");
     }
 
@@ -98,9 +128,6 @@ public class YtdlpLocator {
 
         return applicationDirectory.getFileName().toString().equals("app");
 
-        // Path tools = applicationDirectory.resolve("tools");
-
-        // return Files.isDirectory(tools);
     }
 
     // Executable discovery
@@ -113,7 +140,6 @@ public class YtdlpLocator {
 
         for (String directory : pathEnv.split(java.util.regex.Pattern.quote(File.pathSeparator))) {
             Path candidate = Path.of(directory).resolve(executable);
-            System.out.println("Checking: " + candidate);
 
             if (Files.isRegularFile(candidate) && Files.isExecutable(candidate)) { // check first if the path is a file
                                                                                    // and if it's alos a executable

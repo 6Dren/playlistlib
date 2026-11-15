@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="650.0" prefWidth="410.0" spacing="15" styleClass="main-menu" stylesheets="@../styles/download.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.DownloadController">
+<VBox prefHeight="650.0" prefWidth="410.0" spacing="15" styleClass="main-menu" stylesheets="@../styles/download.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.DownloadController">
 
     <padding>
         <Insets bottom="25" left="30" right="30" top="25" />
