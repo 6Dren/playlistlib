@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.io.File;
 import java.util.Optional;
 
@@ -46,6 +45,27 @@ public class YtdlpLocator {
 
     // Application and packaging information
 
+    // Project root during development, application root when packaged.
+    public static Path getProjectRootDirectory() {
+
+        Path applicationDirectory = getApplicationDirectory();
+
+        Path root;
+
+        if (isPackaged() && isWindows()) {
+            root = applicationDirectory.getParent();
+        } else {
+            root = applicationDirectory.getParent().getParent();
+        }
+
+        if (root == null || !Files.isDirectory(root)) {
+            throw new IllegalStateException(
+                    "Unable to determine project root directory");
+        }
+
+        return root;
+    }
+
     public static Path getApplicationDirectory() {
         // Locate the application directory in a jpackage image
         Path javaHome = Path.of(System.getProperty("java.home"));
@@ -80,26 +100,6 @@ public class YtdlpLocator {
         } catch (URISyntaxException e) {
             throw new IllegalStateException("Unable to determine application directory", e);
         }
-
-        // try {
-        // URL location =
-        // YtdlpLocator.class.getProtectionDomain().getCodeSource().getLocation();
-        // Path locationPath = Path.of(location.toURI());
-
-        // System.out.println(
-        // YtdlpLocator.class.getProtectionDomain().getCodeSource());
-
-        // if (Files.isDirectory(locationPath))
-        // return locationPath;
-        // if (Files.isRegularFile(locationPath) && locationPath.getParent() != null)
-        // return locationPath.getParent();
-
-        // throw new IllegalStateException("Unable to determine application directory");
-
-        // } catch (URISyntaxException e) {
-        // throw new IllegalStateException("Unable to determine application directory.",
-        // e);
-        // }
     }
 
     public static Path getToolsDirectory() {

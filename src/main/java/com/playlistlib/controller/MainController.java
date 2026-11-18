@@ -1,20 +1,18 @@
 package com.playlistlib.controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 // import java.nio.file.PathMatcher;
 
-import com.playlistlib.util.YtdlpLocator;
-
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.VBox;;
 
 public class MainController {
@@ -49,6 +47,19 @@ public class MainController {
 
         stage.setScene(new Scene(root));
 
+    }
+
+    @FXML
+    private void openLibrary(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(
+                getClass().getResource("/com/playlistlib/views/library.fxml"));
+
+        Stage stage = (Stage) ((Node) event.getSource())
+                .getScene()
+                .getWindow();
+
+        stage.setScene(new Scene(root));
+        stage.sizeToScene();
     }
 
 }

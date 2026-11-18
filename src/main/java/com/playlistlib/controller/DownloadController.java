@@ -6,14 +6,20 @@ import java.util.stream.Stream;
 
 import com.playlistlib.model.DownloadRequest;
 import com.playlistlib.service.YtdlpDownloadService;
+import com.playlistlib.util.YtdlpLocator;
 
 import javafx.application.Platform;
 import java.nio.file.Path;
-import javafx.event.ActionEvent;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.File;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.event.ActionEvent;
 
 import javafx.stage.Stage;
+import javafx.stage.DirectoryChooser;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
@@ -30,6 +36,8 @@ import javafx.scene.control.Button;
 public class DownloadController {
 
     private final YtdlpDownloadService downloadService = new YtdlpDownloadService();
+
+    private Path selectedOutputDirectory;
 
     private static final List<String> AUDIO_FORMATS = List.of(
             "MP3", "WAV", "FLAC", "M4A",
@@ -75,6 +83,9 @@ public class DownloadController {
 
         thumbnailCheckBox.setSelected(true);
 
+        directoryField.setEditable(false);
+        directoryField.setOnMouseClicked(event -> chooseDirectory());
+
     }
 
     @FXML
@@ -95,10 +106,21 @@ public class DownloadController {
         String format = formatBox.getValue();
 
         String directory = directoryField.getText().trim();
+        Path outputDirectory;
 
-        Path outputDirectory = directory.isEmpty()
-                ? null
-                : Path.of(directory);
+        try {
+            outputDirectory = resolveOutputDirectory();
+
+        } catch (IOException e) {
+            outputText.appendText(
+                    "Invalid output directory: " + e.getMessage() + "\n");
+
+            statusLabel.setText("Invalid output directory.");
+            statusLabel.setTextFill(Color.RED);
+
+            return;
+        }
+
 
         DownloadRequest request = new DownloadRequest(
                 url,
@@ -175,6 +197,44 @@ public class DownloadController {
         });
 
         downloadThread.start();
+    }
+
+    private void chooseDirectory() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Choose a directory for this list");
+
+        Path initialDirectory = selectedOutputDirectory != null
+                ? selectedOutputDirectory
+                : Path.of(System.getProperty("user.home"));
+
+        if (Files.isDirectory(initialDirectory)) {
+            chooser.setInitialDirectory(initialDirectory.toFile());
+        }
+
+        File selected = chooser.showDialog(directoryField.getScene().getWindow());
+
+        if (selected != null) {
+            selectedOutputDirectory = selected.toPath()
+                    .toAbsolutePath()
+                    .normalize();
+
+            directoryField.setText(selectedOutputDirectory.toString());
+        }
+    }
+
+    private Path resolveOutputDirectory() throws IOException {
+        Path outputDirectory;
+
+        if (selectedOutputDirectory != null) {
+            outputDirectory = selectedOutputDirectory;
+        } else {
+            outputDirectory = YtdlpLocator.getProjectRootDirectory()
+                    .resolve("DEFAULT_LIST");
+        }
+
+        Files.createDirectories(outputDirectory);
+
+        return outputDirectory;
     }
 
 }
