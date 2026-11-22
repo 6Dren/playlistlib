@@ -10,47 +10,53 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="650.0" prefWidth="410.0" spacing="15" styleClass="main-menu" stylesheets="@../styles/download.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.DownloadController">
-
-    <padding>
-        <Insets bottom="25" left="30" right="30" top="25" />
-    </padding>
-
-    <Label styleClass="title" text="Download media" />
-
-    <Label styleClass="description" text="Enter the URL you want to download." />
-
+<VBox minHeight="500" minWidth="350" prefHeight="535.0" prefWidth="669.0" spacing="10" styleClass="download-root" stylesheets="@../styles/download.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.DownloadController">
+  <padding>
+    <Insets bottom="12" left="15" right="15" top="12" />
+  </padding>
+  <!-- HEADER -->
+  <VBox spacing="7">
+    <Label styleClass="page-title" text="Download media" />
+    <Label styleClass="page-subtitle" text="Download audio and video from online sources." />
     <Separator />
-
-    <Label text="media URL" />
-
-    <TextField fx:id="urlField" prefWidth="350" promptText="https://www.youtube.com/watch?v=..." />
-
-    <Label text="Output format" />
-
-    <ComboBox fx:id="formatBox" prefWidth="150" promptText="Select format" styleClass="output-format" />
-
-    <CheckBox fx:id="thumbnailCheckBox" text="Embed thumbnail" />
-
-    <Label text="Output directory" />
-
-    <TextField fx:id="directoryField" promptText="Default download directory" />
-
-          <Button fx:id="downloadButton" onAction="#handleDownload" prefHeight="40.0" prefWidth="282.0" styleClass="download-button" text="Download" />
-
-          <Label fx:id="statusLabel" styleClass="status" text="Current state" />
-   <TitledPane fx:id="outputPane" animated="false" expanded="false" prefHeight="147.0" prefWidth="350.0" styleClass="output-pane" text="Download ouput">
+  </VBox>
+  <!-- MAIN CONTENT -->
+  <VBox spacing="10" styleClass="download-panel" VBox.vgrow="ALWAYS">
+    <!-- URL -->
+    <VBox spacing="5">
+      <Label styleClass="field-label" text="Media URL" />
+      <TextField fx:id="urlField" maxWidth="1.7976931348623157E308" promptText="https://www.youtube.com/watch?v=..." />
+    </VBox>
+    <!-- FORMAT AND THUMBNAIL -->
+    <VBox spacing="5">
+      <Label styleClass="field-label" text="Output options" />
+      <HBox alignment="CENTER_LEFT" spacing="10">
+        <ComboBox fx:id="formatBox" maxWidth="1.7976931348623157E308" promptText="Select format" styleClass="output-format" HBox.hgrow="ALWAYS" />
+        <CheckBox fx:id="thumbnailCheckBox" text="Embed thumbnail" />
+      </HBox>
+    </VBox>
+    <!-- OUTPUT DIRECTORY -->
+    <VBox spacing="5">
+      <Label styleClass="field-label" text="Output directory" />
+      <TextField fx:id="directoryField" maxWidth="1.7976931348623157E308" promptText="Default download directory" />
+    </VBox>
+    <!-- DOWNLOAD ACTION -->
+    <Button fx:id="downloadButton" maxWidth="1.7976931348623157E308" onAction="#handleDownload" prefHeight="36" styleClass="primary-button" text="Download" />
+    <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308" styleClass="status-label" text="Current state" />
+    <!-- DOWNLOAD OUTPUT -->
+    <TitledPane fx:id="outputPane" animated="false" expanded="false" maxWidth="1.7976931348623157E308" styleClass="output-pane" text="Download output" VBox.vgrow="ALWAYS">
       <content>
-         <TextArea fx:id="outputText" editable="false" prefHeight="84.0" prefWidth="348.0" />
+        <TextArea fx:id="outputText" editable="false" prefHeight="0.0" prefWidth="545.0" wrapText="true" />
       </content>
-   </TitledPane>
-   <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="350.0">
-      <children>
-      
-          <Button onAction="#goBack" prefWidth="90" styleClass="go-back-button" text="← Back" />
-      </children>
-   </HBox>
-
+    </TitledPane>
+  </VBox>
+  <!-- FOOTER -->
+  <Separator />
+  <HBox alignment="CENTER_RIGHT">
+    <Region HBox.hgrow="ALWAYS" />
+    <Button onAction="#goBack" styleClass="back-button" text="← Back" />
+  </HBox>
 </VBox>

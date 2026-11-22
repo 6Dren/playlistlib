@@ -22,8 +22,6 @@ public class MainController {
     @FXML
     private Button libraryButton;
 
-    @FXML
-    private Button settingsButton;
 
     @FXML
     private Button exitButton;
@@ -60,6 +58,11 @@ public class MainController {
 
         stage.setScene(new Scene(root));
         stage.sizeToScene();
+    }
+
+    @FXML 
+    void about() {
+        
     }
 
 }

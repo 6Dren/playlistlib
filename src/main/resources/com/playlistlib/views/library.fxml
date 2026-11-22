@@ -4,74 +4,110 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="551.0" prefWidth="863.0" styleClass="main-menu" stylesheets="@../styles/main.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.LibraryController">
-
-    <padding>
-        <Insets bottom="18.0" left="22.0" right="22.0" top="18.0" />
-    </padding>
-
-    <top>
-        <VBox spacing="6.0">
-            <Label styleClass="title" text="Library" />
-            <Label styleClass="description" text="Browse your downloaded media and lists." />
-            <Separator />
-        </VBox>
-    </top>
-
-    <center>
-        <SplitPane dividerPositions="0.3" prefHeight="390.0">
+<BorderPane minHeight="460" minWidth="800" prefHeight="620" prefWidth="1000" styleClass="library-root" stylesheets="@../styles/library.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.LibraryController">
+  <padding>
+    <Insets bottom="10" left="12" right="12" top="10" />
+  </padding>
+  <!-- TOP SECTION -->
+  <top>
+    <VBox spacing="7">
+      <MenuBar styleClass="library-menu-bar">
+        <menus>
+          <!--    <Menu onAction="#goBack" onMenuValidation="#goBack" styleClass="topback" text="Back" /> -->
+          <Menu styleClass="menu-back">
+            <graphic>
+              <Label onMouseClicked="#goBack" text="Back" />
+            </graphic>
+          </Menu>
+          <Menu text="Library">
             <items>
-                <VBox minWidth="150.0" prefHeight="418.0" prefWidth="292.0" spacing="8.0">
-                    <Label text="Lists" />
-                    <ListView fx:id="listsView" prefWidth="211.0" VBox.vgrow="ALWAYS" />
-                </VBox>
-
-                <VBox minWidth="280.0" prefHeight="432.0" prefWidth="569.0" spacing="8.0">
-                    <HBox alignment="CENTER_LEFT" spacing="8.0">
-                        <Label fx:id="selectedListLabel" styleClass="description" text="No list selected" />
-                        <Label fx:id="mediaCountLabel" text="0 media items">
-                     <HBox.margin>
-                        <Insets right="60.0" />
-                     </HBox.margin></Label>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="28.0" prefWidth="183.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <TextField fx:id="searchMediaField" onAction="#searchMedia" prefHeight="28.0" prefWidth="324.0" promptText="Search a media here" HBox.hgrow="ALWAYS" />
-                     </children>
-                  </HBox>
-                    </HBox>
-                    <TableView fx:id="mediaTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="titleColumn" prefWidth="230.0" text="Title" />
-                            <TableColumn fx:id="durationColumn" prefWidth="85.0" text="Duration" />
-                            <TableColumn fx:id="sourceColumn" prefWidth="130.0" text="Source" />
-                        </columns>
-                    </TableView>
-                </VBox>
+              <MenuItem onAction="#refreshLibrary" text="Refresh" />
+              <SeparatorMenuItem />
+              <MenuItem onAction="#goBack" text="Back" />
             </items>
-        </SplitPane>
-    </center>
+          </Menu>
+          <Menu text="Lists">
+            <items>
+              <MenuItem onAction="#importList" text="Import List" />
+              <MenuItem onAction="#removeList" text="Remove Selected List" />
+            </items>
+          </Menu>
+          <Menu text="Media">
+            <items>
+              <MenuItem onAction="#addMedia" text="Add Media" />
+              <MenuItem onAction="#removeMedia" text="Remove Selected Media" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox alignment="CENTER_LEFT" spacing="9">
+        <Label styleClass="page-title" text="Library" />
+        <Label styleClass="page-subtitle" text="Browse your downloaded media and lists." />
+      </HBox>
+      <Separator />
+    </VBox>
+  </top>
 
-    <bottom>
-        <VBox spacing="8.0">
-            <Separator />
-            <HBox alignment="CENTER_LEFT" spacing="10.0">
-                <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308" text="Select a list to view its media." HBox.hgrow="ALWAYS" />
-                <Button onAction="#refreshLibrary" text="Refresh" />
-            <Button onAction="#importList" text="Import List" />
-            <Button onAction="#removeList" text="Remove List" />
-            <Button onAction="#addMedia" text="Add media" />
-            <Button onAction="#removeMedia" text="Remove Media" />
-                <Button onAction="#goBack" text="← Back" />
-            </HBox>
+  <!-- MAIN CONTENT -->
+  <center>
+    <SplitPane dividerPositions="0.21" styleClass="library-split-pane">
+      <items>
+        <!-- LISTS PANEL -->
+        <VBox minWidth="145" prefWidth="190" spacing="7" styleClass="library-panel">
+          <HBox alignment="CENTER_LEFT" spacing="5">
+            <Label styleClass="section-title" text="Lists" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#importList" styleClass="primary-button,icon-button" text="+" />
+          </HBox>
+          <ListView fx:id="listsView" VBox.vgrow="ALWAYS" />
+          <Button maxWidth="1.7976931348623157E308" onAction="#removeList" styleClass="danger-button,compact-button" text="Remove selected list" />
         </VBox>
-    </bottom>
+        <!-- MEDIA PANEL -->
+        <VBox minWidth="400" spacing="7" styleClass="library-panel">
+          <!-- SELECTED LIST INFORMATION -->
+          <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label fx:id="selectedListLabel" styleClass="section-title" text="No list selected" />
+            <Label fx:id="mediaCountLabel" styleClass="count-label" text="0 media items" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#addMedia" styleClass="primary-button,compact-button" text="Add media" />
+            <Button onAction="#removeMedia" styleClass="danger-button,compact-button" text="Remove" />
+          </HBox>
+          <!-- SEARCH -->
+          <TextField fx:id="searchMediaField" maxWidth="1.7976931348623157E308" prefHeight="32" promptText="Search media by title..." styleClass="search-field" />
+          <!-- MEDIA TABLE -->
+          <TableView fx:id="mediaTable" VBox.vgrow="ALWAYS">
+            <columns>
+              <TableColumn fx:id="titleColumn" prefWidth="420" text="Title" />
+              <TableColumn fx:id="durationColumn" prefWidth="100" text="Duration" />
+              <TableColumn fx:id="sourceColumn" prefWidth="180" text="Source" />
+            </columns>
+          </TableView>
+        </VBox>
+      </items>
+    </SplitPane>
+  </center>
+
+  <!-- BOTTOM -->
+  <bottom>
+    <VBox spacing="6">
+      <Separator />
+      <HBox alignment="CENTER_LEFT" spacing="8">
+        <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308" styleClass="status-label" text="Select a list to view its media." HBox.hgrow="ALWAYS" />
+      </HBox>
+    </VBox>
+  </bottom>
 </BorderPane>

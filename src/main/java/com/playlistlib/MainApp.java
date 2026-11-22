@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import com.playlistlib.database.DatabaseManager;
@@ -12,6 +13,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
         // Initialize the database with SQLite
         DatabaseManager.initialize();
 
@@ -24,6 +26,8 @@ public class MainApp extends Application {
 
         stage.setTitle("Playlistlib");
         stage.setScene(scene);
+        stage.getIcons().add(
+                new Image(getClass().getResourceAsStream("/com/playlistlib/icons/logoplib.png")));
         stage.setMinWidth(310);
         stage.setMinHeight(420);
         stage.setResizable(false);

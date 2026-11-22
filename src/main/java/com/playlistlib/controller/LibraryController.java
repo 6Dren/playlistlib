@@ -16,7 +16,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -25,7 +28,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.TableRow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -45,11 +49,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import java.util.Locale;
 
 public class LibraryController {
     @FXML
     private TextField searchMediaField;
-
 
     private static final List<String> AUDIO_FORMATS = YtdlpDownloadService.AUDIO_FORMATS;
 
@@ -59,6 +65,10 @@ public class LibraryController {
 
     private final LibraryService libraryService = new LibraryService();
     private MediaList selectedList;
+
+    private final ObservableList<Media> allMedia = FXCollections.observableArrayList();
+
+    private FilteredList<Media> filteredMedia;
 
     @FXML
     private ListView<MediaList> listsView;
@@ -89,6 +99,13 @@ public class LibraryController {
     @FXML
     private void initialize() {
         configureTable();
+        configureContextMenus();
+
+        filteredMedia = new FilteredList<>(allMedia, media -> true);
+        mediaTable.setItems(filteredMedia);
+
+        searchMediaField.textProperty().addListener(
+                (observable, oldValue, newValue) -> searchMedia());
 
         listsView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -101,7 +118,19 @@ public class LibraryController {
     }
 
     private void searchMedia() {
-        
+        String query = searchMediaField.getText()
+                .trim()
+                .toLowerCase(Locale.ROOT);
+
+        // Add the medias containing the query
+        filteredMedia.setPredicate(media -> {
+            if (query.isEmpty())
+                return true;
+
+            String title = media.getTitle().toLowerCase(Locale.ROOT);
+
+            return title.contains(query.toLowerCase());
+        });
     }
 
     private void configureTable() {
@@ -127,6 +156,81 @@ public class LibraryController {
 
         mediaTable.setItems(FXCollections.observableArrayList());
         mediaTable.setPlaceholder(new Label("This list has no media yet."));
+    }
+
+    private void configureContextMenus() {
+
+        // LIST CONTEXT MENU
+        listsView.setCellFactory(view -> new ListCell<>() {
+
+            private final ContextMenu contextMenu = new ContextMenu();
+
+            {
+                MenuItem removeItem = new MenuItem("Remove list");
+
+                removeItem.setOnAction(event -> {
+                    MediaList item = getItem();
+
+                    if (item != null) {
+                        listsView.getSelectionModel().select(item);
+                        removeList();
+                    }
+                });
+
+                contextMenu.getItems().add(removeItem);
+
+                contextMenu.setOnShowing(event -> {
+                    MediaList item = getItem();
+
+                    if (item != null) {
+                        listsView.getSelectionModel().select(item);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(MediaList item, boolean empty) {
+                super.updateItem(item, empty);
+
+                setText(empty || item == null ? null : item.getName());
+                setContextMenu(empty ? null : contextMenu);
+            }
+        });
+
+        // MEDIA TABLE CONTEXT MENU
+        mediaTable.setRowFactory(table -> new TableRow<>() {
+
+            private final ContextMenu contextMenu = new ContextMenu();
+
+            {
+                MenuItem addItem = new MenuItem("Add media");
+
+                MenuItem removeItem = new MenuItem("Remove media");
+
+                addItem.setOnAction(event -> addMedia());
+                removeItem.setOnAction(event -> removeMedia());
+
+                contextMenu.getItems().addAll(
+                        addItem,
+                        new SeparatorMenuItem(),
+                        removeItem);
+
+                contextMenu.setOnShowing(event -> {
+                    Media item = getItem();
+
+                    if (item != null) {
+                        table.getSelectionModel().select(item);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Media item, boolean empty) {
+                super.updateItem(item, empty);
+
+                setContextMenu(empty ? null : contextMenu);
+            }
+        });
     }
 
     @FXML
@@ -200,7 +304,8 @@ public class LibraryController {
 
     private void loadSelectedList(MediaList selectedList) {
         if (selectedList == null) {
-            mediaTable.getItems().clear();
+            // mediaTable.getItems().clear();
+            allMedia.clear();
             selectedListLabel.setText("No list selected");
             mediaCountLabel.setText("0 media items");
             return;
@@ -208,7 +313,8 @@ public class LibraryController {
 
         try {
             List<Media> media = mediaRepository.findByListId(selectedList.getId());
-            mediaTable.getItems().setAll(media);
+            // mediaTable.getItems().setAll(media);
+            allMedia.setAll(media);
             selectedListLabel.setText(selectedList.getName());
             mediaCountLabel.setText(media.size() +
                     (media.size() == 1 ? " media item" : " media items"));

@@ -38,7 +38,7 @@ public class DownloadController {
 
     private Path selectedOutputDirectory;
 
-    public static final List<String> ALL_FORMATS = YtdlpDownloadService.VIDEO_FORMATS;
+    public static final List<String> ALL_FORMATS = YtdlpDownloadService.ALL_FORMATS;
 
     private static final String DEFAULT_FORMAT = "MP3";
 
