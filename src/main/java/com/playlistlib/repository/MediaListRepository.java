@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Database operations for physical media-list directories. */
 public final class MediaListRepository {
@@ -41,6 +43,84 @@ public final class MediaListRepository {
             statement.setString(5, mediaList.getCreatedAt().toString());
             statement.setString(6, mediaList.getUpdatedAt().toString());
             statement.executeUpdate();
+        }
+    }
+
+    public List<MediaList> findAll(Connection connection) throws SQLException {
+
+        Objects.requireNonNull(connection, "Connection cannot be null");
+
+        String sql = """
+                SELECT *
+                FROM media_lists
+                ORDER BY name COLLATE NOCASE, id
+                """;
+
+        List<MediaList> lists = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet result = statement.executeQuery()) {
+
+            while (result.next()) {
+                lists.add(mapRow(result));
+            }
+        }
+
+        return lists;
+    }
+
+    public void removeList(MediaList mediaList, boolean removePhysically) throws SQLException, IOException {
+        try (Connection connection = DatabaseManager.getConnection()) {
+            removeListFromDatabase(connection, mediaList);
+            // if (removePhysically)
+            // removeListPhysically(connection, mediaList);
+        }
+    }
+
+    public void removeListFromDatabase(
+            Connection connection,
+            MediaList mediaList) throws SQLException {
+
+        Objects.requireNonNull(connection, "Connection cannot be null");
+        Objects.requireNonNull(mediaList, "Media list cannot be null");
+
+        String sql = """
+                DELETE FROM media_lists
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, mediaList.getId());
+
+            int rowsDeleted = statement.executeUpdate();
+
+            if (rowsDeleted == 0) {
+                throw new SQLException(
+                        "Media list not found: " + mediaList.getId());
+            }
+        }
+    }
+
+    public void updateDirectoryPath(
+            Connection connection,
+            String listId,
+            String directoryPath) throws SQLException {
+
+        String sql = """
+                UPDATE media_lists
+                SET directory_path = ?
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, directoryPath);
+            statement.setString(2, listId);
+
+            if (statement.executeUpdate() != 1) {
+                throw new SQLException("Media list not found: " + listId);
+            }
         }
     }
 

@@ -1,54 +1,44 @@
 package com.playlistlib.controller;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Stream;
-
 import com.playlistlib.model.DownloadRequest;
+import com.playlistlib.service.LibraryService;
 import com.playlistlib.service.YtdlpDownloadService;
 import com.playlistlib.util.YtdlpLocator;
 
 import javafx.application.Platform;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.io.File;
-
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.event.ActionEvent;
-
-import javafx.stage.Stage;
-import javafx.stage.DirectoryChooser;
-import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
-
-import javafx.scene.control.TextField;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Label;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class DownloadController {
 
     private final YtdlpDownloadService downloadService = new YtdlpDownloadService();
+    private final LibraryService libraryService = new LibraryService();
 
     private Path selectedOutputDirectory;
 
-    private static final List<String> AUDIO_FORMATS = List.of(
-            "MP3", "WAV", "FLAC", "M4A",
-            "OPUS", "AAC", "ALAC", "VORBIS");
-
-    private static final List<String> VIDEO_FORMATS = List.of(
-            "MP4", "WEBM");
-
-    public static final List<String> ALL_FORMATS = Stream.concat(
-            AUDIO_FORMATS.stream(),
-            VIDEO_FORMATS.stream()).toList();
+    public static final List<String> ALL_FORMATS = YtdlpDownloadService.VIDEO_FORMATS;
 
     private static final String DEFAULT_FORMAT = "MP3";
 
@@ -85,42 +75,40 @@ public class DownloadController {
 
         directoryField.setEditable(false);
         directoryField.setOnMouseClicked(event -> chooseDirectory());
-
     }
 
     @FXML
-    private void goBack(javafx.event.ActionEvent event) throws IOException {
+    private void goBack(ActionEvent event) throws IOException {
         VBox root = FXMLLoader.load(getClass().getResource("/com/playlistlib/main.fxml"));
-
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         stage.setScene(new Scene(root));
-
     }
 
     @FXML
     private void handleDownload(ActionEvent event) {
-        // Get the URL and remove whitespace
-        String url = urlField.getText().trim();
+        String url = urlField.getText() == null ? "" : urlField.getText().trim();
 
-        String format = formatBox.getValue();
-
-        String directory = directoryField.getText().trim();
-        Path outputDirectory;
-
-        try {
-            outputDirectory = resolveOutputDirectory();
-
-        } catch (IOException e) {
-            outputText.appendText(
-                    "Invalid output directory: " + e.getMessage() + "\n");
-
-            statusLabel.setText("Invalid output directory.");
+        if (url.isEmpty()) {
+            outputText.appendText("Please enter a valid URL.\n");
+            statusLabel.setText("Please enter a valid URL.");
             statusLabel.setTextFill(Color.RED);
-
             return;
         }
 
+        String format = formatBox.getValue();
+        if (format == null || format.isBlank()) {
+            format = DEFAULT_FORMAT;
+        }
+
+        Path outputDirectory;
+        try {
+            outputDirectory = resolveOutputDirectory();
+        } catch (IOException | RuntimeException exception) {
+            outputText.appendText("Invalid output directory: " + exception.getMessage() + "\n");
+            statusLabel.setText("Invalid output directory.");
+            statusLabel.setTextFill(Color.RED);
+            return;
+        }
 
         DownloadRequest request = new DownloadRequest(
                 url,
@@ -128,75 +116,98 @@ public class DownloadController {
                 thumbnailCheckBox.isSelected(),
                 outputDirectory);
 
-        // Check if url is empty
-        if (url.isEmpty()) {
-            outputText.appendText("Please enter a valid URL.");
-
-            statusLabel.setTextFill(Color.RED);
-            statusLabel.setText("Please enter a valid URL.");
-            return;
-        }
-
-        // Clean the field for the next input | I may change it to keep the same url
-        // even after pressing download
         outputText.clear();
-
-        outputText.appendText("Starting download...");
+        outputText.appendText("Starting download...\n");
         statusLabel.setText("Downloading...");
         statusLabel.setTextFill(Color.web("#222222"));
         downloadButton.setDisable(true);
 
-        // Run the download on a background thread so the UI doesn't freeze
-        Thread downloadThread = new Thread(() -> {
-            try {
-                int exitCode = downloadService.download(
-                        request,
-                        line -> Platform.runLater(
-                                () -> outputText.appendText(line + "\n")));
-
-                Platform.runLater(() -> {
-
-                    if (exitCode == 0) {
-                        outputText.appendText("Download completed!\n");
-                        statusLabel.setText("Download completed");
-                        statusLabel.setTextFill(Color.GREEN);
-
-                    } else {
-                        outputText.appendText(
-                                "Download failed. Exit code: " + exitCode + "\n");
-
-                        statusLabel.setText("Download failed.");
-                        statusLabel.setTextFill(Color.RED);
-                    }
-
-                    downloadButton.setDisable(false);
-                });
-
-            } catch (InterruptedException e) {
-
-                Thread.currentThread().interrupt();
-
-                Platform.runLater(() -> {
-                    outputText.appendText("\nDownload interrupted.\n");
-                    statusLabel.setText("Download interrupted.");
-                    statusLabel.setTextFill(Color.RED);
-                    downloadButton.setDisable(false);
-                });
-
-            } catch (IOException e) {
-
-                Platform.runLater(() -> {
-                    outputText.appendText(
-                            "\nCould not start yt-dlp: " + e.getMessage() + "\n");
-
-                    statusLabel.setText("Could not start yt-dlp.");
-                    statusLabel.setTextFill(Color.RED);
-                    downloadButton.setDisable(false);
-                });
-            }
-        });
-
+        Thread downloadThread = new Thread(() -> runDownload(request), "playlistlib-download");
         downloadThread.start();
+    }
+
+    private void runDownload(DownloadRequest request) {
+        // Register the selected directory as a list before downloading.
+        // This also creates an empty .playlistlib.json manifest when the
+        // download produces no new files or metadata cannot be collected.
+        try {
+            libraryService.getOrCreateList(request.getOutputDirectory());
+            Platform.runLater(() -> outputText.appendText(
+                    "List registered. Manifest: "
+                            + request.getOutputDirectory().resolve(".playlistlib.json")
+                            + "\n"));
+        } catch (SQLException | IOException | RuntimeException exception) {
+            Platform.runLater(() -> finishWithError(
+                    "Could not create or open this library list: " + exception.getMessage()));
+            return;
+        }
+
+        YtdlpDownloadService.DownloadResult result;
+
+        try {
+            result = downloadService.downloadAndCollect(
+                    request,
+                    line -> Platform.runLater(() -> outputText.appendText(line + "\n")));
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            Platform.runLater(() -> finishWithError("Download interrupted."));
+            return;
+        } catch (IOException | RuntimeException exception) {
+            Platform.runLater(() -> finishWithError(
+                    "Could not run yt-dlp: " + exception.getMessage()));
+            return;
+        }
+
+        int registeredCount = 0;
+        try {
+            if (!result.downloadedItems().isEmpty()) {
+                Platform.runLater(() -> outputText.appendText(
+                        "Registering " + result.downloadedItems().size()
+                                + " downloaded item(s) in the library...\n"));
+
+                registeredCount = libraryService.registerDownloads(
+                        request.getOutputDirectory(),
+                        result.downloadedItems()).size();
+
+                int countForMessage = registeredCount;
+                Platform.runLater(() -> outputText.appendText(
+                        countForMessage + " media item(s) added to the library.\n"));
+            } else {
+                Platform.runLater(() -> outputText.appendText(
+                        "No new completed media files to register.\n"));
+            }
+        } catch (SQLException | IOException | RuntimeException exception) {
+            String message = "Download finished, but the library or manifest could not be "
+                    + "updated: " + exception.getMessage();
+            Platform.runLater(() -> finishWithError(message));
+            return;
+        }
+
+        int finalRegisteredCount = registeredCount;
+        Platform.runLater(() -> {
+            if (result.exitCode() == 0) {
+                outputText.appendText("Download completed!\n");
+                statusLabel.setText(finalRegisteredCount > 0
+                        ? "Completed · " + finalRegisteredCount + " item(s) added to library"
+                        : "Download completed; no new items to register.");
+                statusLabel.setTextFill(Color.GREEN);
+            } else {
+                outputText.appendText("Download failed or partially completed. Exit code: "
+                        + result.exitCode() + "\n");
+                statusLabel.setText(finalRegisteredCount > 0
+                        ? "Partial failure · " + finalRegisteredCount + " item(s) saved to library"
+                        : "Download failed.");
+                statusLabel.setTextFill(Color.RED);
+            }
+            downloadButton.setDisable(false);
+        });
+    }
+
+    private void finishWithError(String message) {
+        outputText.appendText(message + "\n");
+        statusLabel.setText(message);
+        statusLabel.setTextFill(Color.RED);
+        downloadButton.setDisable(false);
     }
 
     private void chooseDirectory() {
@@ -214,27 +225,23 @@ public class DownloadController {
         File selected = chooser.showDialog(directoryField.getScene().getWindow());
 
         if (selected != null) {
-            selectedOutputDirectory = selected.toPath()
-                    .toAbsolutePath()
-                    .normalize();
-
+            selectedOutputDirectory = selected.toPath().toAbsolutePath().normalize();
             directoryField.setText(selectedOutputDirectory.toString());
         }
     }
 
     private Path resolveOutputDirectory() throws IOException {
-        Path outputDirectory;
+        Path outputDirectory = selectedOutputDirectory != null
+                ? selectedOutputDirectory
+                : YtdlpLocator.getProjectRootDirectory().resolve("DEFAULT_LIST");
 
-        if (selectedOutputDirectory != null) {
-            outputDirectory = selectedOutputDirectory;
-        } else {
-            outputDirectory = YtdlpLocator.getProjectRootDirectory()
-                    .resolve("DEFAULT_LIST");
-        }
-
+        outputDirectory = outputDirectory.toAbsolutePath().normalize();
         Files.createDirectories(outputDirectory);
+
+        if (!Files.isDirectory(outputDirectory) || !Files.isWritable(outputDirectory)) {
+            throw new IOException("Directory is not writable: " + outputDirectory);
+        }
 
         return outputDirectory;
     }
-
 }

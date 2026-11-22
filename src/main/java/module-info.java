@@ -5,7 +5,7 @@ module com.playlistlib {
 
     requires java.sql;
     requires org.xerial.sqlitejdbc;
-
+    requires com.google.gson;
 
     exports com.playlistlib;
 

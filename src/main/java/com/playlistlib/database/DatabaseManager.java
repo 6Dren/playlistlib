@@ -20,9 +20,10 @@ public final class DatabaseManager {
     private static final List<Migration> MIGRATIONS = List.of(
             new Migration(
                     1,
-                    "/com/playlistlib/migrations/V1__initial_schema.sql"
-            )
-    );
+                    "/com/playlistlib/migrations/V1__initial_schema.sql"),
+            new Migration(
+                    2,
+                    "/com/playlistlib/migrations/V2__media_list_id.sql"));
 
     private DatabaseManager() {
     }
@@ -32,7 +33,6 @@ public final class DatabaseManager {
      */
     private record Migration(int version, String resource) {
     }
-
 
     /*
      * Returns the location of library.db.
@@ -45,7 +45,6 @@ public final class DatabaseManager {
 
         return root.resolve(DATABASE_NAME);
     }
-
 
     /*
      * Creates and configures a database connection.
@@ -81,7 +80,6 @@ public final class DatabaseManager {
         }
     }
 
-
     /*
      * Initializes the database and applies missing migrations.
      */
@@ -90,21 +88,30 @@ public final class DatabaseManager {
 
         Path databasePath = getDatabasePath();
 
+        boolean databaseExists = Files.exists(databasePath);
+
+        System.out.println("Database path: " + databasePath.toAbsolutePath());
+
+        // Check if the there is a library.db
+        if (databaseExists) {
+            System.out.println("Existing database found.");
+        } else {
+            System.out.println("No database found. Creating a new one...");
+        }
+
         try (Connection connection = getConnection()) {
 
             int schemaVersion = getSchemaVersion(connection);
 
-            int latestVersion =
-                    MIGRATIONS.get(MIGRATIONS.size() - 1).version();
+            int latestVersion = MIGRATIONS.get(MIGRATIONS.size() - 1).version();
 
             // The database was created by a newer application version.
             if (schemaVersion > latestVersion) {
 
                 throw new SQLException(
                         "Database schema is newer than this application. "
-                        + "Current version: " + schemaVersion
-                        + ", supported version: " + latestVersion
-                );
+                                + "Current version: " + schemaVersion
+                                + ", supported version: " + latestVersion);
             }
 
             // Apply all migrations that have not been executed yet.
@@ -122,21 +129,18 @@ public final class DatabaseManager {
 
                 throw new SQLException(
                         "Database initialization incomplete. "
-                        + "Current schema version: " + schemaVersion
-                        + ", expected: " + latestVersion
-                );
+                                + "Current schema version: " + schemaVersion
+                                + ", expected: " + latestVersion);
             }
 
             // Display database information.
             try (Statement statement = connection.createStatement();
-                 ResultSet result =
-                         statement.executeQuery("SELECT sqlite_version()")) {
+                    ResultSet result = statement.executeQuery("SELECT sqlite_version()")) {
 
                 if (result.next()) {
 
                     System.out.println(
-                            "SQLite version: " + result.getString(1)
-                    );
+                            "SQLite version: " + result.getString(1));
                 }
             }
 
@@ -145,6 +149,33 @@ public final class DatabaseManager {
         }
     }
 
+    /**
+     * Adds media.list_id to databases created with the earlier V1 schema.
+     */
+    private static void ensureMediaListIdColumn(Connection connection)
+            throws SQLException {
+
+        boolean hasListId = false;
+
+        try (Statement statement = connection.createStatement();
+                ResultSet columns = statement.executeQuery("PRAGMA table_info(media)")) {
+
+            while (columns.next()) {
+                if ("list_id".equalsIgnoreCase(columns.getString("name"))) {
+                    hasListId = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasListId) {
+            try (Statement statement = connection.createStatement()) {
+                statement.execute(
+                        "ALTER TABLE media ADD COLUMN list_id TEXT "
+                                + "REFERENCES media_lists(id) ON DELETE CASCADE");
+            }
+        }
+    }
 
     /*
      * Reads the current database schema version.
@@ -162,7 +193,7 @@ public final class DatabaseManager {
                 """;
 
         try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery(checkTable)) {
+                ResultSet result = statement.executeQuery(checkTable)) {
 
             if (!result.next()) {
                 return 0;
@@ -171,29 +202,26 @@ public final class DatabaseManager {
 
         // The schema_version table exists. Read its version.
         try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery(
-                     "SELECT version FROM schema_version WHERE id = 1")) {
+                ResultSet result = statement.executeQuery(
+                        "SELECT version FROM schema_version WHERE id = 1")) {
 
             if (!result.next()) {
 
                 throw new SQLException(
                         "The schema_version table exists, "
-                        + "but its version record is missing."
-                );
+                                + "but its version record is missing.");
             }
 
             return result.getInt("version");
         }
     }
 
-
     /*
      * Executes a migration inside a transaction.
      */
     private static void applyMigration(
             Connection connection,
-            Migration migration
-    ) throws SQLException, IOException {
+            Migration migration) throws SQLException, IOException {
 
         boolean previousAutoCommit = connection.getAutoCommit();
 
@@ -203,13 +231,17 @@ public final class DatabaseManager {
 
             System.out.println(
                     "Applying database migration V"
-                    + migration.version()
-            );
+                            + migration.version());
+
+            // Older V1 databases were created before media.list_id existed.
+            // Newer V1 databases already contain it, so check before altering.
+            if (migration.version() == 2) {
+                ensureMediaListIdColumn(connection);
+            }
 
             SqlScriptRunner.execute(
                     connection,
-                    migration.resource()
-            );
+                    migration.resource());
 
             // Verify that the script updated the schema version.
             int newVersion = getSchemaVersion(connection);
@@ -218,17 +250,15 @@ public final class DatabaseManager {
 
                 throw new SQLException(
                         "Migration V" + migration.version()
-                        + " did not update the schema version correctly. "
-                        + "Found version: " + newVersion
-                );
+                                + " did not update the schema version correctly. "
+                                + "Found version: " + newVersion);
             }
 
             connection.commit();
 
             System.out.println(
                     "Migration V" + migration.version()
-                    + " completed successfully."
-            );
+                            + " completed successfully.");
 
         } catch (SQLException | IOException | RuntimeException e) {
 

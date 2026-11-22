@@ -53,8 +53,8 @@ CREATE TABLE media (
 
     FOREIGN KEY (list_id)
         REFERENCES media_lists(id)
-        ON DELETE CASCADE
-    
+        ON DELETE CASCADE,
+
     UNIQUE (id, list_id)
 
 );

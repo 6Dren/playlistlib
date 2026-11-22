@@ -98,23 +98,31 @@ public final class MediaRepository {
     public Optional<Media> findById(String id)
             throws SQLException, IOException {
 
+        try (Connection connection = DatabaseManager.getConnection()) {
+            return findById(connection, id);
+        }
+    }
+
+    public Optional<Media> findById(Connection connection, String id)
+            throws SQLException {
+
+        Objects.requireNonNull(connection);
+        Objects.requireNonNull(id);
+
         String sql = """
                 SELECT *
                 FROM media
                 WHERE id = ?
                 """;
 
-        try (Connection connection = DatabaseManager.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, id);
 
             try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    return Optional.of(mapRow(result));
-                }
-
-                return Optional.empty();
+                return result.next()
+                        ? Optional.of(mapRow(result))
+                        : Optional.empty();
             }
         }
     }
@@ -178,16 +186,25 @@ public final class MediaRepository {
     public boolean deleteById(String id)
             throws SQLException, IOException {
 
+        try (Connection connection = DatabaseManager.getConnection()) {
+            return deleteById(connection, id);
+        }
+    }
+
+    /** Deletes a media record using a caller-owned connection and transaction. */
+    public boolean deleteById(Connection connection, String id)
+            throws SQLException {
+
+        Objects.requireNonNull(connection, "Connection cannot be null");
+        Objects.requireNonNull(id, "Media ID cannot be null");
+
         String sql = """
                 DELETE FROM media
                 WHERE id = ?
                 """;
 
-        try (Connection connection = DatabaseManager.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, id);
-
             return statement.executeUpdate() == 1;
         }
     }

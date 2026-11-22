@@ -13,6 +13,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /** Database operations for the physical files belonging to media items. */
 public final class MediaFileRepository {
@@ -50,6 +51,30 @@ public final class MediaFileRepository {
             statement.setString(8, mediaFile.getChecksum());
             statement.setString(9, mediaFile.getAddedAt().toString());
             statement.executeUpdate();
+        }
+    }
+
+    public Optional<MediaFile> findById(Connection connection, String id)
+            throws SQLException {
+
+        Objects.requireNonNull(connection);
+        Objects.requireNonNull(id);
+
+        String sql = """
+                SELECT *
+                FROM media_files
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, id);
+
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next()
+                        ? Optional.of(mapRow(result))
+                        : Optional.empty();
+            }
         }
     }
 
@@ -96,8 +121,7 @@ public final class MediaFileRepository {
                     result.getString("mime_type"),
                     fileSize,
                     result.getString("checksum"),
-                    Instant.parse(result.getString("added_at"))
-            );
+                    Instant.parse(result.getString("added_at")));
         } catch (DateTimeParseException exception) {
             throw new SQLException("Invalid timestamp stored in media_files", exception);
         }

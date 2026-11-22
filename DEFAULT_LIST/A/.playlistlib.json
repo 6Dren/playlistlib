@@ -1,0 +1,61 @@
+{
+  "manifestVersion": 1,
+  "list": {
+    "id": "0a4cae91-1a69-4dae-842b-3d16bfdc3421",
+    "name": "A",
+    "createdAt": "2026-11-18T09:03:52.836313009Z",
+    "updatedAt": "2026-11-19T21:40:33.333428611Z"
+  },
+  "entries": [
+    {"id": "969c7721-cced-4948-a4e0-4ca5f6609c73", "type": "MEDIA", "position": 0, "mediaId": "2df0d3ff-c38e-4d12-af11-86ce5ac0f0cf"},
+    {"id": "3299d699-a2f3-48bf-893b-373a6bf7ceda", "type": "MEDIA", "position": 1, "mediaId": "82cf86b3-dea5-4f03-a421-af62fab3d7b1"}
+  ],
+  "media": [
+    {
+      "id": "2df0d3ff-c38e-4d12-af11-86ce5ac0f0cf",
+      "title": "the girl next door - ON TOP",
+      "sourceUrl": "https://www.youtube.com/watch?v=AaF7rXatU9E",
+      "sourceId": "AaF7rXatU9E",
+      "extractor": "youtube",
+      "durationSeconds": 133.0,
+      "metadataJson": "{\"id\":\"AaF7rXatU9E\",\"title\":\"the girl next door - ON TOP\",\"webpage_url\":\"https://www.youtube.com/watch?v=AaF7rXatU9E\",\"original_url\":\"https://www.youtube.com/watch?v=AaF7rXatU9E\",\"extractor\":\"youtube\",\"duration\":133,\"filepath\":\"/home/flersh/Sync/codes/java/playlistlib/DEFAULT_LIST/A/the girl next door - ON TOP [AaF7rXatU9E].mp3\",\"ext\":\"mp3\"}",
+      "createdAt": "2026-11-18T09:03:58.520215840Z",
+      "updatedAt": "2026-11-18T09:03:58.520215840Z",
+      "files": [
+        {
+          "id": "c27de3b0-8065-4f9f-8ba5-1cc4d736985f",
+          "relativePath": "the girl next door - ON TOP [AaF7rXatU9E].mp3",
+          "fileRole": "MEDIA",
+          "format": "mp3",
+          "mimeType": "audio/mpeg",
+          "fileSize": 2443398,
+          "checksum": null,
+          "addedAt": "2026-11-18T09:03:58.520747664Z"
+        }
+      ]
+    },
+    {
+      "id": "82cf86b3-dea5-4f03-a421-af62fab3d7b1",
+      "title": "Total of 550k 😂😂 #fyp#foryoupage#meme#sunflower#plantsvszombies#viral",
+      "sourceUrl": "https://www.tiktok.com/@artesianr/video/7389383288848174368",
+      "sourceId": "7389383288848174368",
+      "extractor": "TikTok",
+      "durationSeconds": 10.0,
+      "metadataJson": "{\"id\":\"7389383288848174368\",\"title\":\"Total of 550k 😂😂 #fyp#foryoupage#meme#sunflower#plantsvszombies#viral \",\"webpage_url\":\"https://www.tiktok.com/@artesianr/video/7389383288848174368\",\"original_url\":\"https://www.tiktok.com/@artesianr/video/7389383288848174368\",\"extractor\":\"TikTok\",\"duration\":10,\"filepath\":\"/home/flersh/Sync/codes/java/playlistlib/DEFAULT_LIST/A/Total of 550k 😂😂 #fyp#foryoupage#meme#sunflower#plantsvszombies#viral  [7389383288848174368].mp3\",\"ext\":\"mp3\"}",
+      "createdAt": "2026-11-19T21:40:33.332042315Z",
+      "updatedAt": "2026-11-19T21:40:33.332042315Z",
+      "files": [
+        {
+          "id": "37108d1d-e85a-44eb-b272-dfce6d5f8b40",
+          "relativePath": "Total of 550k 😂😂 #fyp#foryoupage#meme#sunflower#plantsvszombies#viral  [7389383288848174368].mp3",
+          "fileRole": "MEDIA",
+          "format": "mp3",
+          "mimeType": "audio/mpeg",
+          "fileSize": 735333,
+          "checksum": null,
+          "addedAt": "2026-11-19T21:40:33.332714089Z"
+        }
+      ]
+    }
+  ]
+}

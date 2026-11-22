@@ -8,17 +8,12 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="520.0" prefWidth="760.0"
-            styleClass="main-menu"
-            stylesheets="@../styles/main.css"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.playlistlib.controller.LibraryController">
+<BorderPane prefHeight="551.0" prefWidth="863.0" styleClass="main-menu" stylesheets="@../styles/main.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.LibraryController">
 
     <padding>
         <Insets bottom="18.0" left="22.0" right="22.0" top="18.0" />
@@ -33,27 +28,31 @@
     </top>
 
     <center>
-        <SplitPane dividerPositions="0.30" prefHeight="390.0">
+        <SplitPane dividerPositions="0.3" prefHeight="390.0">
             <items>
-                <VBox minWidth="150.0" spacing="8.0">
+                <VBox minWidth="150.0" prefHeight="418.0" prefWidth="292.0" spacing="8.0">
                     <Label text="Lists" />
-                    <ListView fx:id="listsView" prefWidth="190.0" VBox.vgrow="ALWAYS" />
+                    <ListView fx:id="listsView" prefWidth="211.0" VBox.vgrow="ALWAYS" />
                 </VBox>
 
-                <VBox minWidth="280.0" spacing="8.0">
+                <VBox minWidth="280.0" prefHeight="432.0" prefWidth="569.0" spacing="8.0">
                     <HBox alignment="CENTER_LEFT" spacing="8.0">
-                        <Label fx:id="selectedListLabel" styleClass="description"
-                               text="No list selected" />
-                        <Label fx:id="mediaCountLabel" text="0 media items" />
+                        <Label fx:id="selectedListLabel" styleClass="description" text="No list selected" />
+                        <Label fx:id="mediaCountLabel" text="0 media items">
+                     <HBox.margin>
+                        <Insets right="60.0" />
+                     </HBox.margin></Label>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="28.0" prefWidth="183.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <TextField fx:id="searchMediaField" onAction="#searchMedia" prefHeight="28.0" prefWidth="324.0" promptText="Search a media here" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
                     </HBox>
                     <TableView fx:id="mediaTable" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="titleColumn" prefWidth="230.0"
-                                         text="Title" />
-                            <TableColumn fx:id="durationColumn" prefWidth="85.0"
-                                         text="Duration" />
-                            <TableColumn fx:id="sourceColumn" prefWidth="130.0"
-                                         text="Source" />
+                            <TableColumn fx:id="titleColumn" prefWidth="230.0" text="Title" />
+                            <TableColumn fx:id="durationColumn" prefWidth="85.0" text="Duration" />
+                            <TableColumn fx:id="sourceColumn" prefWidth="130.0" text="Source" />
                         </columns>
                     </TableView>
                 </VBox>
@@ -65,9 +64,12 @@
         <VBox spacing="8.0">
             <Separator />
             <HBox alignment="CENTER_LEFT" spacing="10.0">
-                <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308"
-                       text="Select a list to view its media." HBox.hgrow="ALWAYS" />
+                <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308" text="Select a list to view its media." HBox.hgrow="ALWAYS" />
                 <Button onAction="#refreshLibrary" text="Refresh" />
+            <Button onAction="#importList" text="Import List" />
+            <Button onAction="#removeList" text="Remove List" />
+            <Button onAction="#addMedia" text="Add media" />
+            <Button onAction="#removeMedia" text="Remove Media" />
                 <Button onAction="#goBack" text="← Back" />
             </HBox>
         </VBox>
