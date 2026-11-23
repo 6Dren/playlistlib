@@ -1,0 +1,44 @@
+.dialog-pane.about-dialog {
+    -fx-background-color: #f5f7fa;
+    -fx-border-color: #d8e0e8;
+    -fx-border-width: 1px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+
+.about-dialog .about-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #344f6b;
+}
+
+.about-dialog .about-version {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7b8794;
+}
+
+.about-dialog .about-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #3d4650;
+}
+
+.about-dialog .about-repository {
+    -fx-font-size: 12px;
+    -fx-text-fill: #456d96;
+}
+
+.about-dialog .about-technologies {
+    -fx-font-size: 11px;
+    -fx-text-fill: #7b8794;
+}
+
+.about-dialog .button {
+    -fx-background-color: #456d96;
+    -fx-text-fill: white;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.about-dialog .button:hover {
+    -fx-background-color: #345675;
+}

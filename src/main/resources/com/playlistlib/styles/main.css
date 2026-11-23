@@ -1,61 +1,73 @@
-
-/* Main window */
+/* ROOT */
 
 .main-menu {
-    -fx-background-color: #eeeeee;
-    -fx-font-family: "Arial";
+    -fx-background-color: #f1f3f6;
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
 }
 
-/* Application title */
+/* APPLICATION TITLE */
 
 .title {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
+    -fx-text-fill: #26364a;
 }
 
 .description {
-    -fx-font-size: 13px;
-    -fx-text-fill: #666666;
+    -fx-font-size: 12px;
+    -fx-text-fill: #778293;
 }
 
-/* Menu buttons */
+/* MENU BUTTONS */
+
+.button {
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+    -fx-font-size: 13px;
+    -fx-padding: 9px 12px;
+}
+
+/* PRIMARY MENU ACTIONS */
 
 .menu-button {
-    -fx-background-color: #dddddd;
-    -fx-text-fill: #222222;
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-background-radius: 3px;
-    -fx-cursor: hand;
+    -fx-background-color: #527da9;
+    -fx-text-fill: white;
 }
 
 .menu-button:hover {
-    -fx-background-color: #cccccc;
+    -fx-background-color: #426b96;
 }
 
 .menu-button:pressed {
-    -fx-background-color: #bbbbbb;
+    -fx-background-color: #365a80;
 }
 
-/* Exit button */
+/* EXIT BUTTON */
 
 .exit-button {
-    -fx-background-color: #e0b5b5;
-    -fx-text-fill: #333333;
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-background-radius: 3px;
-    -fx-cursor: hand;
+    -fx-background-color: #b96a6a;
+    -fx-text-fill: white;
 }
 
 .exit-button:hover {
-    -fx-background-color: #d69b9b;
+    -fx-background-color: #a95454;
 }
 
-/* Footer */
+.exit-button:pressed {
+    -fx-background-color: #914545;
+}
+
+/* SEPARATORS */
+
+.separator .line {
+    -fx-border-color: #dce1e8;
+    -fx-border-width: 0.5px;
+}
+
+/* FOOTER */
 
 .footer {
     -fx-font-size: 11px;
-    -fx-text-fill: #888888;
+    -fx-text-fill: #788596;
 }

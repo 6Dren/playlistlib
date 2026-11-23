@@ -1,130 +1,238 @@
-/* Main window */
+/* ROOT */
 
-.root {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.main-menu {
-    -fx-background-color: #eeeeee;
-    -fx-font-family: "Arial";
-}
-
-/* Application title */
-
-.title {
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-}
-
-.description {
+.download-root {
+    -fx-background-color: #f1f3f6;
+    -fx-font-family: "System";
     -fx-font-size: 13px;
-    -fx-text-fill: #666666;
 }
 
-/* Menu buttons */
+/* HEADER */
 
-.menu-button {
-    -fx-background-color: #dddddd;
-    -fx-text-fill: #222222;
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-background-radius: 3px;
-    -fx-cursor: hand;
+.page-title {
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #26364a;
 }
 
-.menu-button:hover {
-    -fx-background-color: #cccccc;
+.page-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #778293;
 }
 
-.menu-button:pressed {
-    -fx-background-color: #bbbbbb;
+/* MAIN PANEL */
+
+.download-panel {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 6px;
+    -fx-border-color: #dce1e8;
+    -fx-border-radius: 6px;
+    -fx-padding: 12px;
 }
 
-/* Output Format */
+/* FIELD LABELS */
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #46566b;
+}
+
+/* TEXT FIELDS */
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d5dce5;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px 9px;
+    -fx-prompt-text-fill: #9aa4b2;
+}
+
+.text-field:focused {
+    -fx-border-color: #7198c2;
+    -fx-border-width: 1.2px;
+}
+
+/* COMBO BOX */
+
 .output-format {
-    -fx-max-width: infinity;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d5dce5;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
     -fx-cursor: hand;
 }
 
-/* Download button */
+.output-format:focused {
+    -fx-border-color: #7198c2;
+}
 
-.download-button {
-    -fx-background-color: #dddddd;
-    -fx-text-fill: #222222;
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
+.output-format .list-cell {
+    -fx-text-fill: #3e4b5c;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d5dce5;
+}
+
+.combo-box-popup .list-cell {
+    -fx-padding: 7px;
+    -fx-text-fill: #3e4b5c;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #edf3fa;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #dce8f5;
+}
+
+/* CHECKBOX */
+
+.check-box {
+    -fx-text-fill: #46566b;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+}
+
+.check-box .box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #c5ced9;
+    -fx-border-radius: 3px;
     -fx-background-radius: 3px;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #527da9;
+    -fx-border-color: #527da9;
+}
+
+/* BUTTONS */
+
+.button {
     -fx-cursor: hand;
-    -fx-max-width: infinity;
+    -fx-font-size: 12px;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px 11px;
 }
 
-.download-button:hover {
-    -fx-background-color: #cccccc;
+/* PRIMARY BUTTON */
+
+.primary-button {
+    -fx-background-color: #527da9;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
 }
 
-.download-button:pressed {
-    -fx-background-color: #bbbbbb;
+.primary-button:hover {
+    -fx-background-color: #426b96;
 }
 
-
-/* Status */
-.status {
-    -fx-alignment: center;
-    -fx-text-fill: #222222;
+.primary-button:pressed {
+    -fx-background-color: #365a80;
 }
 
+/* BACK BUTTON */
 
-/* Download output */
+.back-button {
+    -fx-background-color: #b96a6a;
+    -fx-text-fill: white;
+    -fx-padding: 5px 12px;
+}
+
+.back-button:hover {
+    -fx-background-color: #a95454;
+}
+
+.back-button:pressed {
+    -fx-background-color: #914545;
+}
+
+/* STATUS */
+
+.status-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #788596;
+    -fx-padding: 2px 0;
+}
+
+/* OUTPUT PANE */
 
 .output-pane {
-    -fx-background-color: #eeeeee;
-
-
-    /* -fx-border-color: #2b3440; */
-    -fx-border-radius: 9;
-    -fx-background-radius: 9;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dce1e8;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
 }
 
 .output-pane>.title {
-    -fx-background-color: #eeeeee;
-
-    -fx-background-radius: 9;
-    -fx-padding: 12 15;
+    -fx-background-color: #e9edf3;
+    -fx-background-radius: 4px 4px 0 0;
+    -fx-padding: 8px 10px;
 }
 
 .output-pane>.title>.text {
-    /* -fx-fill: #b9c5d4; */
     -fx-font-size: 12px;
-    -fx-font-weight: 700;
+    -fx-font-weight: bold;
+    -fx-fill: #46566b;
 }
 
 .output-pane:expanded>.title {
-    -fx-background-radius: 9 9 0 0;
+    -fx-background-radius: 4px 4px 0 0;
 }
 
-
-/* Go back button */
-
-.go-back-button {
-    -fx-background-color: #e0b5b5;
-    -fx-text-fill: #333333;
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-background-radius: 3px;
-    -fx-cursor: hand;
-    -fx-alignment: center;
+.output-pane>.content {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dce1e8;
+    -fx-border-width: 1px 0 0 0;
 }
 
-.go-back-button:hover {
-    -fx-background-color: #d69b9b;
+/* OUTPUT TEXT AREA */
 
-}
-
-/* Footer */
-
-.footer {
+.output-pane .text-area {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0 0 4px 4px;
+    -fx-border-color: transparent;
+    -fx-padding: 5px;
+    -fx-font-family: "Monospaced";
     -fx-font-size: 11px;
-    -fx-text-fill: #888888;
+}
+
+.output-pane .text-area .content {
+    -fx-background-color: #ffffff;
+}
+
+.output-pane .text-area .text {
+    -fx-fill: #46566b;
+}
+
+/* SEPARATORS */
+
+.separator .line {
+    -fx-border-color: #dce1e8;
+    -fx-border-width: 0.5px;
+}
+
+/* SCROLL BARS */
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #c4ccd7;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #aab5c4;
 }

@@ -1,54 +1,83 @@
-# playlistlib — Project Plan
+# Playlistlib
 
-## 1. Overview
+Playlistlib is a Java desktop application that provides a graphical interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp). It works as a download manager and a local media library, allowing users to download, organize, and manage audio and video files without using terminal commands for everyday operations.
 
-playlistlib is a Java desktop application for downloading and organizing audio and video using yt-dlp.
+The application uses SQLite to store library information and JSON manifest files to make lists easier to import and transfer between directories.
 
-The project will start as a simple downloader and gradually introduce playlist management, media collections, and a local database.
+## Features
 
-## 2. Main Features
+- Download audio and video using yt-dlp.
+- Choose the output format and download options.
+- Organize media into lists and directories.
+- Import existing lists and add local media files.
+- Search and manage items in the local library.
+- Store library information using SQLite.
 
-- Download audio  and video using yt-dlp
-- Display download progress and errors.
-- Organize media into folders and collections.
-- Save download history and preferences.
+## Technologies
 
-- Manage data using SQLite.
+- **Java 21** — Application logic.
+- **JavaFX** — Graphical interface.
+- **FXML / XML** — Interface layouts.
+- **CSS** — Interface styling.
+- **Maven** — Dependency management and builds.
+- **SQLite** — Local database.
+- **yt-dlp** — Media downloads.
+- **FFmpeg** — Audio and video processing.
 
-## 3. Technologies
+## Requirements
 
-- Java 21 — Application logic.
-- JavaFX — GUI.
-- FXML — Interface layouts.
-- CSS — Styling.
-- Maven — Dependencies and builds.
-- yt-dlp — Media downloads.
-- FFmpeg — Audio and video processing.
-- SQLite — Local database.
+To run the project from source, you need:
 
-## 4. Development Phases
+- Git
+- JDK 21
+- Maven
+- yt-dlp and FFmpeg
 
-### Phase 1 — Basic Downloader
+Make sure `yt-dlp` and FFmpeg are installed and available through your system's `PATH`.
 
-- Create the JavaFX interface.
-- Accept URLs and select formats.
-- Choose the download directory.
-- Run yt-dlp through a thread.
-- Display progress, status, and errors.
-- Keep the interface responsive.
+## Getting Started
 
-### Phase 2 — Playlists and Collections
+Clone the repository:
 
-- Download complete playlists.
-- Display playlist information.
-- Create and manage collections.
-- Organize downloaded files.
-- Save playlist and collection data.
-- Avoid duplicate downloads.
+```bash
+git clone https://github.com/6Dren/playlistlib.git
+cd playlistlib
+```
 
-### Phase 3 — Database and Users
+Run the application directly using Maven:
 
-- Integrate SQLite.
-- Store download history and preferences.
-- Save user-specific collections.
-- Implement basic database operations.
+```bash
+mvn clean javafx:run
+```
+
+This runs the application from the source code without packaging a standalone executable.
+
+## Packaging
+
+The project includes scripts to package the application for different operating systems.
+
+**Linux**
+
+```bash
+chmod +x scripts/package-linux.sh
+./scripts/package-linux.sh
+```
+
+**Windows (PowerShell)**
+
+```powershell
+.\scripts\package-windows.ps1
+```
+
+These scripts handle the packaging process for their respective platforms.
+
+## Prebuilt Versions
+
+You can also download the latest packaged version from the [GitHub Releases](https://github.com/6Dren/playlistlib/releases) page.
+
+1. Download the archive for your operating system.
+2. Extract its contents.
+3. Launch the application:
+   - **Windows:** Run `Playlistlib.exe`.
+   - **Linux:** Run `bin/Playlistlib`.
+

@@ -28,3 +28,8 @@ packaging/linux/tools/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Database
+library.db
+DEFAULT_LIST/
+.playlistlib.json
