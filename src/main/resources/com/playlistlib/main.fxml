@@ -13,7 +13,7 @@
   </padding>
   <!-- HEADER -->
   <VBox alignment="CENTER" spacing="5">
-    <Label styleClass="title" text="PlaylistLib" />
+    <Label styleClass="title" text="Playlistlib" />
     <Label styleClass="description" text="Media download manager" />
   </VBox>
   <Separator prefWidth="260" />

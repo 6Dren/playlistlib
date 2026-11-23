@@ -7,9 +7,10 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)" # get the root dir
 cd "$ROOT"
 
 #### Define configuration and paths
-APP_NAME="PlaylistLib"
+APP_NAME="Playlistlib"
 APP_VERSION="${APP_VERSION:-0.1.0}"
 PROJECT_VERSION="1.0-SNAPSHOT" # Keep in sync with pom.xml
+ICON="$ROOT/src/main/resources/com/playlistlib/icons/logoplib.png"
 
 # The versions that the project is using
 YT_DLP_VERSION="2026.10.26" 
@@ -25,7 +26,7 @@ WORK="$BUILD/package-linux"
 mvn clean package
 mkdir -p "$DIST"
 jpackage --type app-image --name "$APP_NAME" --app-version "$APP_VERSION" \
-  --vendor "$APP_NAME" --dest "$DIST" \
+  --vendor "$APP_NAME" --icon "$ICON" --dest "$DIST" \
   --module-path "$BUILD/playlistlib-$PROJECT_VERSION.jar:$BUILD/dependency" \
   --module com.playlistlib/com.playlistlib.MainApp
 
@@ -57,7 +58,7 @@ LICENSES="$APP_IMAGE/licenses"
 # Locate the required executables and FFmpeg license inside the extracted archive.
 FFMPEG_BIN="$(find "$WORK/ffmpeg" -type f -name ffmpeg -print -quit)"
 FFPROBE_BIN="$(find "$WORK/ffmpeg" -type f -name ffprobe -print -quit)"
-FFMPEG_LICENSE="$(find "$WOiRK/ffmpeg" -type f -name LICENSE.txt -print -quit)"
+FFMPEG_LICENSE="$(find "$WORK/ffmpeg" -type f -name LICENSE.txt -print -quit)"
 
 # Abort if a required checksum or file could not be found.
 [[ -n "$YT_HASH" && -n "$FF_HASH" && -n "$FFMPEG_BIN" && -n "$FFPROBE_BIN" && -n "$FFMPEG_LICENSE" ]]
@@ -80,14 +81,14 @@ install -m644 "$FFMPEG_LICENSE" "$LICENSES/ffmpeg/LICENSE.txt"
 printf 'FFmpeg n9.0 LGPL build. Asset: %s\nBuild project: https://github.com/FFmpeg-Builds/FFmpeg-Builds\n' \
   "$FFMPEG_ASSET" > "$LICENSES/ffmpeg/BUILD_INFO.txt"
 
-# Copy PlaylistLib's own license and third-party notices.
+# Copy Playlistlib's own license and third-party notices.
 cp "$ROOT/LICENSE" "$APP_IMAGE/LICENSE"
 cp "$ROOT/THIRD_PARTY_NOTICES.md" "$APP_IMAGE/THIRD_PARTY_NOTICES.md"
 
 #### Create the final archive
 # Archive the application directory, preserving its top-level folder structure.
-tar -czf "$DIST/PlaylistLib-linux-x86_64.tar.gz" -C "$DIST" "$APP_NAME"
-echo "Created: $DIST/PlaylistLib-linux-x86_64.tar.gz"
+tar -czf "$DIST/Playlistlib-linux-x86_64.tar.gz" -C "$DIST" "$APP_NAME"
+echo "Created: $DIST/Playlistlib-linux-x86_64.tar.gz"
 
 
 #### References

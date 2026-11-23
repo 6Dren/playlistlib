@@ -8,8 +8,12 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -21,7 +25,6 @@ public class MainController {
 
     @FXML
     private Button libraryButton;
-
 
     @FXML
     private Button exitButton;
@@ -60,9 +63,55 @@ public class MainController {
         stage.sizeToScene();
     }
 
-    @FXML 
+    @FXML
     void about() {
-        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle("About Playlistlib");
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
+
+        Label title = new Label("Playlistlib");
+        title.getStyleClass().add("about-title");
+
+        Label version = new Label("Version 1.0-SNAPSHOT");
+        version.getStyleClass().add("about-version");
+
+        Label description = new Label(
+                "A simple desktop application for \ndownloading and organizing audio and video.");
+        description.setWrapText(true);
+        description.getStyleClass().add("about-description");
+
+        Label repository = new Label("GitHub: github.com/6Dren/playlistlib");
+        repository.getStyleClass().add("about-repository");
+
+        Label technologies = new Label("Java 21 · JavaFX · SQLite · yt-dlp");
+        technologies.getStyleClass().add("about-technologies");
+
+        VBox content = new VBox(10,
+                title,
+                version,
+                description,
+                new Separator(),
+                repository,
+                technologies);
+
+        content.setPadding(new Insets(10, 15, 10, 15));
+
+        var dialogPane = alert.getDialogPane();
+        dialogPane.setContent(content);
+        dialogPane.setMinWidth(380);
+        dialogPane.getStyleClass().add("about-dialog");
+
+        var stylesheet = getClass().getResource(
+                "/com/playlistlib/styles/about.css");
+
+        if (stylesheet != null) {
+            dialogPane.getStylesheets().add(stylesheet.toExternalForm());
+        }
+
+        alert.showAndWait();
+
     }
 
 }

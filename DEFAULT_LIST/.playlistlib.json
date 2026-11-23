@@ -4,13 +4,14 @@
     "id": "81b65715-874f-4b9c-8a4c-4d6eb5cfbb55",
     "name": "DEFAULT_LIST",
     "createdAt": "2026-11-18T08:51:47.670863299Z",
-    "updatedAt": "2026-11-23T12:17:50.321186162Z"
+    "updatedAt": "2026-11-23T12:23:49.440129425Z"
   },
   "entries": [
     {"id": "a8dc9f7f-c230-4260-91e8-bf1cc406b279", "type": "MEDIA", "position": 0, "mediaId": "18a9b07f-a441-41b7-9507-d3ab70cd1fc1"},
     {"id": "28baff43-74b0-4a28-89f3-e5da2dcdd999", "type": "LIST", "position": 1, "childListId": "0a4cae91-1a69-4dae-842b-3d16bfdc3421"},
     {"id": "0cac5da1-9d7c-436c-ae45-4b386237a562", "type": "MEDIA", "position": 2, "mediaId": "799868de-5a88-4236-8199-31f94851ccd4"},
-    {"id": "438b447f-9db7-424f-8105-0c45a10a872f", "type": "MEDIA", "position": 3, "mediaId": "fc793bab-3a44-4f4f-bc0d-343d6dedc92e"}
+    {"id": "438b447f-9db7-424f-8105-0c45a10a872f", "type": "MEDIA", "position": 3, "mediaId": "fc793bab-3a44-4f4f-bc0d-343d6dedc92e"},
+    {"id": "6baf1b59-42c5-46bd-a7b8-08fac23011d4", "type": "MEDIA", "position": 4, "mediaId": "e4c4feae-ac21-4554-a5c2-db6ab458a001"}
   ],
   "media": [
     {
@@ -79,6 +80,29 @@
           "fileSize": 1113358,
           "checksum": null,
           "addedAt": "2026-11-19T21:39:00.751891121Z"
+        }
+      ]
+    },
+    {
+      "id": "e4c4feae-ac21-4554-a5c2-db6ab458a001",
+      "title": "Hishokah - School Rooftop (Slowed Down Version)",
+      "sourceUrl": "https://www.youtube.com/watch?v=tIY4YBSxX3w",
+      "sourceId": "tIY4YBSxX3w",
+      "extractor": "youtube",
+      "durationSeconds": 194.0,
+      "metadataJson": "{\"id\":\"tIY4YBSxX3w\",\"title\":\"Hishokah - School Rooftop (Slowed Down Version)\",\"webpage_url\":\"https://www.youtube.com/watch?v=tIY4YBSxX3w\",\"original_url\":\"https://www.youtube.com/watch?v=tIY4YBSxX3w\",\"extractor\":\"youtube\",\"duration\":194,\"filepath\":\"/home/flersh/Sync/codes/java/playlistlib/DEFAULT_LIST/Hishokah - School Rooftop (Slowed Down Version) [tIY4YBSxX3w].mp3\",\"ext\":\"mp3\"}",
+      "createdAt": "2026-11-23T12:23:49.407330290Z",
+      "updatedAt": "2026-11-23T12:23:49.407330290Z",
+      "files": [
+        {
+          "id": "fc308f3a-6892-4010-8d2b-7ced16417466",
+          "relativePath": "Hishokah - School Rooftop (Slowed Down Version) [tIY4YBSxX3w].mp3",
+          "fileRole": "MEDIA",
+          "format": "mp3",
+          "mimeType": "audio/mpeg",
+          "fileSize": 2951730,
+          "checksum": null,
+          "addedAt": "2026-11-23T12:23:49.439384308Z"
         }
       ]
     }
