@@ -32,4 +32,5 @@ Thumbs.db
 # Database
 library.db
 DEFAULT_LIST/
+DEFAULT_LIST/*
 .playlistlib.json
