@@ -11,11 +11,11 @@ Set-Location $Root
 
 # Application information.
 $AppName = 'Playlistlib'
-$AppVersion = if ($env:APP_VERSION) { $env:APP_VERSION } else { '0.1.0' }
+$AppVersion = if ($env:APP_VERSION) { $env:APP_VERSION } else { '1.0.0' }
 $AppIcon = Join-Path $Root 'src\main\resources\com\playlistlib\icons\logoplib.ico'
 
 # Project and external dependency versions.
-$ProjectVersion = '1.0-SNAPSHOT' # Keep in sync with pom.xml
+$ProjectVersion = '1.0.0' # Keep in sync with pom.xml
 $YtDlpVersion = '2026.10.26'
 $FfmpegAsset = 'ffmpeg-n9.0-latest-win64-lgpl-9.0.zip'
 

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minHeight="460" minWidth="800" prefHeight="620" prefWidth="1000" styleClass="library-root" stylesheets="@../styles/library.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.LibraryController">
+<BorderPane minHeight="460" minWidth="800" prefHeight="620" prefWidth="1000" styleClass="library-root" stylesheets="@../styles/library.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.LibraryController">
   <padding>
     <Insets bottom="10" left="12" right="12" top="10" />
   </padding>

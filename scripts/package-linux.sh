@@ -8,8 +8,8 @@ cd "$ROOT"
 
 #### Define configuration and paths
 APP_NAME="Playlistlib"
-APP_VERSION="${APP_VERSION:-0.1.0}"
-PROJECT_VERSION="1.0-SNAPSHOT" # Keep in sync with pom.xml
+APP_VERSION="${APP_VERSION:-1.0.0}"
+PROJECT_VERSION="1.0.0" # Keep in sync with pom.xml
 ICON="$ROOT/src/main/resources/com/playlistlib/icons/logoplib.png"
 
 # The versions that the project is using

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" minHeight="416.0" minWidth="310" prefHeight="416.0" prefWidth="355.0" spacing="13" styleClass="main-menu" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.MainController">
+<VBox alignment="CENTER" minHeight="416.0" minWidth="310" prefHeight="416.0" prefWidth="355.0" spacing="13" styleClass="main-menu" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.playlistlib.controller.MainController">
   <padding>
     <Insets bottom="25" left="25" right="25" top="25" />
   </padding>
